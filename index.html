@@ -29,14 +29,36 @@
             
             var map = L.mapbox.map('map', 'mapbox.light',{
                 center: [34.029287, -118.284053],
-                zoom: 8,
+                zoom: 9,
                 minZoom: 8,
-                maxZoom: 9,
+                maxZoom: 12,
               //maxBounds: L.latLngBounds([], [])
             });
             
-            omnivore.csv('energy_use.csv').addTo(map);
-           
+           var power = omnivore.csv('energy_use.csv')
+            .on('ready', function(e) {
+        
+                drawMap(e.target.toGeoJSON());
+            })
+                .on('error', function(e) {
+                    console.log(e.error[0].message);
+        });
+            
+            var water = omnivore.csv('Water.csv')
+            .on('ready', function(e) {
+        
+                drawMap(e.target.toGeoJSON());
+            })
+                .on('error', function(e) {
+                    console.log(e.error[0].message);
+        });
+            
+            function drawMap(power,water){
+                var power = L.geoJson(power).addTo(map);
+                var water = L.geoJson(water).addTo(map);
+                
+                console.log(power);
+            }
         
         </script>
     </body>
