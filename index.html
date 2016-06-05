@@ -130,10 +130,12 @@
     <body>
         
     <div id='map'></div>
+<!--
         <div id='ui-controls'>
         <label><span class="min">2005</span><span class="max">2013</span>
         <input type="range" min = "2005", max= "2013", 
                value = "2005", step= "1", class="year-slider">
+-->
         
         <script>
             L.mapbox.accessToken ='pk.eyJ1IjoiZWdpY2tyIiwiYSI6ImNpbndrOThibzE2bWJ1a2x5d2VmcmcweXMifQ.28keS-TMDnaPXR3dxInE_w';
@@ -148,8 +150,7 @@
             
             
             
-           $.getJSON('zipcode.json', function(geoZip){
-           console.log(geoZip);
+           $.getJSON('la_zips.json', function(geoZip){
             
                Papa.parse('energy_use.csv',{
                 download : true, //maintains the format of the cvs
@@ -167,23 +168,29 @@
             
             for(var zipcode in geoZip.features){
                 //looping structure to loop through the arrays of counties
-         
+           
                 var props = geoZip.features[zipcode].properties;
-            
+        
             for(d in csvData.data){
                 //loops through the csv data
-                
-                if(props.Zipcode === csvData.data[d].NAME){
-                    //matches csv data and county names
+             
+                if(String(props.Zip_Num) === csvData.data[d].Zipcode){
+                    //matches csv data and zip areas
                    
                     geoZip.features[zipcode].properties = csvData.data[d];
-                            break; // breaks out of the looping structure
+                    break; // breaks out of the looping structure
                 }
             }//end of inner loop
         
         }//end of outer loop
             
-            drawMap(geoCounties);// function call
+        drawMap(geoZip);// function call
+    }
+            
+    function drawMap(geoZip) {
+        
+        L.geoJson(geoZip).addTo(map);
+        
     }
         
    
