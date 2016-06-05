@@ -148,8 +148,8 @@
             
             
             
-           $.getJSON('zipcode.json', function(geoZip){
-           console.log(geoZip);
+           $.getJSON('ZipCodes.json', function(geoZip){
+          
             
                Papa.parse('energy_use.csv',{
                 download : true, //maintains the format of the cvs
@@ -164,7 +164,7 @@
     
                 // function to process/bind data
         function processData(geoZip,csvData){
-            
+            console.log(geoZip);
             for(var zipcode in geoZip.features){
                 //looping structure to loop through the arrays of counties
          
