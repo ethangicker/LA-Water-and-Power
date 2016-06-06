@@ -205,6 +205,8 @@
                 function upDateMap(){
             
                 var breaks = getClassBreaks();
+                    
+                console.log(breaks);
             
                 
                     dataLayer.eachLayer(function(layer){
@@ -258,13 +260,14 @@
             
                 dataLayer.eachLayer(function(layer){
                 //loops though each layer
-                    
-                    var value = Number(layer.feature.properties[attribute]);
-                        values.push(value);
-                    //puts the figurs into our empty array
-                    
+                    if(layer.feature.properties[attribute]) {
+                        var value = Number(layer.feature.properties[attribute]);
+                        values.push(value);  
+                    }
+    
                 });
 
+            console.log(values);
             var breaks = ss.quantile(values, [0, 0.2, 0.4, 0.6, 0.8, 1]);
              //establishes our breaks using simple stats.
                     
