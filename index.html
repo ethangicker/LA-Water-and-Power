@@ -28,13 +28,14 @@
             position: absolute;
             z-index: 100;
             top: 10px;
-            left: 60px;
+            right:100px;
             padding: 8px 15px;
             margin: 0;
             color: whitesmoke;
             font-size: 1.5em;
             background: rgba(25,25,25,0.8);
             border-radius: 5px;  
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
         }
         #map {
             position: absolute;
@@ -116,8 +117,8 @@
 
     </head>
     <body>
-        
-    <div id='map'></div>
+        <h1>LA Power and Water Consumption</h1>
+        <div id='map'></div>
 
         <div id='ui-controls'>
         <label><span class="min">2005</span><span class="max">2013</span>
@@ -218,9 +219,9 @@
                 }) 
                  
                 //binds the popup to the layer and calculates it to show a readable number 
-                layer.bindPopup("<b>"+props["Zip_Num"]+" Zip Code</b></br>" +
+                layer.bindPopup("<b>"+props["Zipcode"]+" Zip Code</b></br>" +
                                 attribute + ": " +
-                                ((props[attribute]))); 
+                                ((props[attribute]))+ ' kWh'); 
                 
                 
                 //creates the mouse over effect
@@ -267,7 +268,7 @@
             var breaks = ss.quantile(values, [0, 0.2, 0.4, 0.6, 0.8, 1]);
              //establishes our breaks using simple stats.
                     
-             console.log(breaks);
+             
                     return breaks;
              
             }
@@ -293,7 +294,7 @@
         // function to draw the legend
         function drawLegend(){
              
-            var legend = L.control({position: 'topright'});
+            var legend = L.control({position: 'bottomright'});
                 // leaflet object and location
             
                     legend.onAdd = function () {
