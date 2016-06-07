@@ -28,13 +28,14 @@
             position: absolute;
             z-index: 100;
             top: 10px;
-            left: 60px;
+            right:100px;
             padding: 8px 15px;
             margin: 0;
             color: whitesmoke;
             font-size: 1.5em;
             background: rgba(25,25,25,0.8);
             border-radius: 5px;  
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
         }
         #map {
             position: absolute;
@@ -111,28 +112,17 @@
             float: right;
     }
         
-        .info {
-             padding: 6px 8px;
-            font-size: 1em;
-            background: rgba(75,75,75,0.8);
-            color: whitesmoke;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-            border-radius: 5px;
-            width: 160px;  
-    }
-        .info h3 {
-            margin: 0;
-    }
-
+        
     </style>
 
     </head>
     <body>
-        
-    <div id='map'></div>
+        <h1>LA Power and Water Consumption</h1>
+        <div id='map'></div>
+
         <div id='ui-controls'>
         <label><span class="min">2005</span><span class="max">2013</span>
-        <input type="range" min = "2005", max= "2013", 
+        <input type="range" min = "2005", max= "2012", 
                value = "2005", step= "1", class="year-slider">
         
         <script>
@@ -140,16 +130,18 @@
             
             var map = L.mapbox.map('map', 'mapbox.light',{
                 center: [34.029287, -118.284053],
-                zoom: 9,
+                zoom: 10,
                 minZoom: 8,
                 maxZoom: 12,
               //maxBounds: L.latLngBounds([], [])
             });
             
+            var dataLayer,
+            attribute = '2005/2006';
             
-            
-           $.getJSON('ZipCodes.json', function(geoZip){
-          
+
+           $.getJSON('la_zips.json', function(geoZip){
+
             
                Papa.parse('energy_use.csv',{
                 download : true, //maintains the format of the cvs
@@ -164,29 +156,228 @@
     
                 // function to process/bind data
         function processData(geoZip,csvData){
+<<<<<<< HEAD
            
-            for(var zipcode in geoZip.features){
-                //looping structure to loop through the arrays of counties
-         
-                var props = geoZip.features[zipcode].properties;
+=======
             
+>>>>>>> origin/master
+            for(var zipcode in geoZip.features){
+                //looping structure to loop through the arrays of zip codes
+           
+                var props = geoZip.features[zipcode].properties;
+        
             for(d in csvData.data){
                 //loops through the csv data
-                
-                if(props.Zipcode === csvData.data[d].NAME){
-                    //matches csv data and county names
-                   
+             
+                if(String(props.Zip_Num) === csvData.data[d].Zipcode){
+                    //matches csv data and zip areas
+               
                     geoZip.features[zipcode].properties = csvData.data[d];
-                            break; // breaks out of the looping structure
+                    break; // breaks out of the looping structure
                 }
             }//end of inner loop
         
         }//end of outer loop
-            
-            drawMap(geoCounties);// function call
+         
+        drawMap(geoZip);// function call
     }
+            
+     // function to draw the map
+        function drawMap(geoZip){
+            
+            dataLayer = L.geoJson(geoZip,{ //convert json to leaflet
+                style : function(feature){
+                    return {
+                        color: 'white',
+                        weight: 1,
+                        fillOpacity: .5,
+                        fillColor: '#1f78b4'
+                    }
+                }
+            })
+                .addTo(map);
+           
+            //one time calls
+            createSliderUI();
+            drawLegend();
+            upDateMap();
+            
+        }
         
-   
+        
+    // function to update the map
+        function upDateMap(){
+            
+                var breaks = getClassBreaks();
+                    
+                    dataLayer.eachLayer(function(layer){
+                        //loops through the geojson layer
+                
+                        var props = layer.feature.properties;
+                        //asings the variable for layer properties
+
+                        layer.setStyle({
+                            fillColor: getColor(Number(layer.feature.properties[attribute]), breaks)
+                            //sets the style of the layer based on the attribute 
+                        }) 
+                 
+                //binds the popup to the layer and calculates it to show a readable number 
+                layer.bindPopup("<b>"+props["Zipcode"]+" Zip Code</b></br>" +
+                                attribute + ": " +
+                                ((props[attribute]))+ ' kWh'); 
+                
+                
+                //creates the mouse over effect
+                   
+                 layer.on('mouseover', function() {
+                    //highlights the zipcode when you mouse over it
+                     layer.setStyle({
+                        color: '#252525',
+                        weight: 4,
+                    });
+                        
+                    layer.bringToFront(); // bring feature to front of all layers
+                });
+                
+                        layer.on('mouseout', function() {
+                        //turns the highlighing off and resets the style the way it was
+                        layer.setStyle({
+                        color: 'white',
+                        weight: 1,
+                    });
+                });
+                
+            });
+                
+            updateLegend(breaks);
+        }
+        
+        
+         // function get the class breaks 
+         function getClassBreaks(){
+            
+            var values = [];
+             // creates an empty array to hold the values
+            
+                dataLayer.eachLayer(function(layer){
+                //loops though each layer
+                    if(layer.feature.properties[attribute]) {
+                        var value = Number(layer.feature.properties[attribute]);
+                        values.push(value);  
+                    }
+    
+                });
+
+       
+            var breaks = ss.quantile(values, [0, 0.2, 0.4, 0.6, 0.8, 1]);
+             //establishes our breaks using simple stats.
+                    
+             
+                    return breaks;
+             
+            }
+        
+       
+        // function to get the color value based on the breaks above.
+        function getColor(d, breaks){
+            if(d <= breaks[1]) {
+                return '#fee5d9';
+            } else if(d <= breaks[2]) {
+                return '#fcae91';
+            } else if(d <= breaks[3]) {
+                return '#fb6a4a';
+            } else if(d <= breaks[4]) {
+                return '#de2d26'
+            } else if(d <= breaks[5]) {
+                return '#a50f15'
+            }
+        }
+            
+        
+                
+        // function to draw the legend
+        function drawLegend(){
+             
+            var legend = L.control({position: 'bottomright'});
+                // leaflet object and location
+            
+                    legend.onAdd = function () {
+                
+                        var div = L.DomUtil.create('div', 'legend');
+                        //this creates a HTML div called legend 
+               
+                return div;
+                        //returns out empty div container
+                
+                    
+            };
+                legend.addTo(map);
+                // adds it to the map
+        }
+        
+        
+        // function to update the legend
+        function updateLegend(breaks){
+            
+            var legend = $('.legend').html("<h3>Power use: " + attribute+ "</h3><ul>" );
+            ////'.'for class, assign variable legend to jquary class 
+            
+                for (var i=0; i< breaks.length-1; i++){
+                     //cycles through each of the breaks
+                    var color = getColor(breaks[i+1], breaks);
+                    //sets the color for each class break
+                        
+                        $('.legend ul').append('<li><span style="background:' + color + '"></span>'
+                            + (breaks[i]).toLocaleString() +  '&mdash; '
+                                + (breaks[i+1]).toLocaleString() + " (kWh)" +'</li>');
+        //adds the color swatch <span> tag, labels each span tag with the rounded string value of the breaks
+                
+            }
+                legend.append("</ul>")
+            //appends the ledgend with a ul tag
+        }
+       
+
+         // function to create the range slider
+         function createSliderUI(){
+            
+        var sliderControl = L.control({position: 'bottomleft'});
+            //positions the slider using leaflet control
+            
+             sliderControl.onAdd = function(map){
+                
+                var slider = L.DomUtil.get('ui-controls')
+                //creates a dom element with an ID and class from above.    
+                
+                    L.DomEvent.addListener(slider, 'mousedown',function(e){
+                       //listens for the click events
+                        L.DomEvent.stopPropagation(e);                     
+                });       //stops the click event
+                
+                return slider
+            }
+            
+            sliderControl.addTo(map);
+            
+            $('.year-slider')
+            //jquaery access to slider
+            .on('input change', function(){
+                
+                attribute = ($(this).val());
+                attribute +='/'+ (Number(attribute)+1)
+                console.log(attribute)
+                //gets the value of a set of elements 
+                upDateMap()
+                
+            })
+        }
+        
+        
+        
+        
+        
+        
+           
         
         </script>
     </body>
