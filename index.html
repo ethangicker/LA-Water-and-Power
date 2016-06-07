@@ -122,7 +122,7 @@
 
         <div id='ui-controls'>
         <label><span class="min">2005</span><span class="max">2013</span>
-        <input type="range" min = "2005", max= "2013", 
+        <input type="range" min = "2005", max= "2012", 
                value = "2005", step= "1", class="year-slider">
         
         <script>
@@ -202,21 +202,20 @@
         
         
     // function to update the map
-                function upDateMap(){
+        function upDateMap(){
             
                 var breaks = getClassBreaks();
-            
-                
+                    
                     dataLayer.eachLayer(function(layer){
                         //loops through the geojson layer
                 
                         var props = layer.feature.properties;
                         //asings the variable for layer properties
 
-                            layer.setStyle({
-                                fillColor: getColor(Number(layer.feature.properties[attribute]), breaks)
-                                //sets the style of the layer based on the attribute 
-                }) 
+                        layer.setStyle({
+                            fillColor: getColor(Number(layer.feature.properties[attribute]), breaks)
+                            //sets the style of the layer based on the attribute 
+                        }) 
                  
                 //binds the popup to the layer and calculates it to show a readable number 
                 layer.bindPopup("<b>"+props["Zipcode"]+" Zip Code</b></br>" +
@@ -258,13 +257,14 @@
             
                 dataLayer.eachLayer(function(layer){
                 //loops though each layer
-                    
-                    var value = Number(layer.feature.properties[attribute]);
-                        values.push(value);
-                    //puts the figurs into our empty array
-                    
+                    if(layer.feature.properties[attribute]) {
+                        var value = Number(layer.feature.properties[attribute]);
+                        values.push(value);  
+                    }
+    
                 });
 
+       
             var breaks = ss.quantile(values, [0, 0.2, 0.4, 0.6, 0.8, 1]);
              //establishes our breaks using simple stats.
                     
@@ -360,6 +360,8 @@
             .on('input change', function(){
                 
                 attribute = ($(this).val());
+                attribute +='/'+ (Number(attribute)+1)
+                console.log(attribute)
                 //gets the value of a set of elements 
                 upDateMap()
                 
