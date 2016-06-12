@@ -114,6 +114,7 @@
     }
          #ui-controls{
             margin-left: 10%;
+            position: absolute
         }
         #ui-controls lable {
             font-size: 1.1em;
@@ -126,20 +127,18 @@
     <body>
         <h1>LA Power and Water Consumption</h1>
         <div id='map'></div>
-        
-        <div id='ui-controls'> 
-        <label>Choose water or power:</label>
-        <select id="WaterUse">
-            <option value="PowerUse" selected>Power used per household</option>
-            <option value="WaterUse" selected>Water used per household</option>
-            </select>
-    </div>
 
-
-        <div id='slider'>
+    <div id='slider'>
         <label><span class="min">2005</span><span class="max">2013</span>
         <input type="range" min = "2005", max= "2013", 
                value = "2005", step= "1", class="year-slider">
+            
+    <div id="button">
+        <label><input type="checkbox" value="PowerUse" checked>Power</label>
+        <br>
+        <label><input type="checkbox" value="WaterUse" checked>Water</label>
+        <br>
+        </div>
         
         <script>
             L.mapbox.accessToken ='pk.eyJ1IjoiZWdpY2tyIiwiYSI6ImNpbndrOThibzE2bWJ1a2x5d2VmcmcweXMifQ.28keS-TMDnaPXR3dxInE_w';
@@ -153,7 +152,7 @@
             });
             
             var dataLayer,
-            attribute = 'WaterUse';
+            attribute = 'PowerUse';
             
 
            $.getJSON('la_zips.json', function(geoZip){
@@ -214,7 +213,8 @@
             //one time calls
             createSliderUI();
             upDateMap();
-            buildUI(); 
+            //buildUI(); 
+            buildCheckBox();
             
         }
         
@@ -341,7 +341,7 @@
             })
         }
             
-             //creates the UI drop down menue
+            /* //creates the UI drop down menue
         function buildUI(){
             
             //jquary[]uses for ID,
@@ -351,10 +351,15 @@
                 drawMap(); //redraws the map with the new user data
             });
             
+        }*/
+        function buildCheckBox(){
+            $('input').on('#button'.change, function () {
+                attribute = $(this).val();
+                drawMap(); //redraws the map with the new user data
+
+            });
+        
         }
-        
-        
-        
         
         
         
