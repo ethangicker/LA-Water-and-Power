@@ -93,24 +93,31 @@
         .leaflet-popup-content {
             max-width: 160px;   
     }
-        #ui-controls {
+        #slider {
             width: 176px;   
             padding: 8px 15px 8px 15px;
             background: rgba(75,75,75,0.8);
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border-radius: 5px; 
             color: whitesmoke;
+            
     }
         .year-slider {
             width: 100%;
     }
-        #ui-controls .min{
+        #slider .min{
             float:left;
         }
         
-        #ui-controls .max{
+        #slider .max{
             float: right;
     }
+         #ui-controls{
+            margin-left: 10%;
+        }
+        #ui-controls lable {
+            font-size: 1.1em;
+            margin-right: 10px;
         
         
     </style>
@@ -119,10 +126,18 @@
     <body>
         <h1>LA Power and Water Consumption</h1>
         <div id='map'></div>
+        
+        <div id='ui-controls'> 
+        <label>Choose water or power:</label>
+        <select id="WaterUse">
+            <option value="PowerUse" selected>Power used per household</option>
+            </select>
+    </div>
 
-        <div id='ui-controls'>
+
+        <div id='slider'>
         <label><span class="min">2005</span><span class="max">2013</span>
-        <input type="range" min = "2005", max= "2012", 
+        <input type="range" min = "2005", max= "2013", 
                value = "2005", step= "1", class="year-slider">
         
         <script>
@@ -137,13 +152,13 @@
             });
             
             var dataLayer,
-            attribute = '2005/2006';
+            attribute = 'WaterUse';
             
 
            $.getJSON('la_zips.json', function(geoZip){
 
             
-               Papa.parse('energy_use.csv',{
+               Papa.parse('WaterPower.csv',{
                 download : true, //maintains the format of the cvs
                 header : true,
                 complete : function(csvData) { 
@@ -167,7 +182,7 @@
             for(d in csvData.data){
                 //loops through the csv data
              
-                if(String(props.Zip_Num) === csvData.data[d].Zipcode){
+                if(String(props.Zip_Num) === csvData.data[d].ZipCode){
                     //matches csv data and zip areas
                
                     geoZip.features[zipcode].properties = csvData.data[d];
@@ -197,8 +212,8 @@
            
             //one time calls
             createSliderUI();
-            drawLegend();
             upDateMap();
+            buildUI(); 
             
         }
         
@@ -220,9 +235,9 @@
                         }) 
                  
                 //binds the popup to the layer and calculates it to show a readable number 
-                layer.bindPopup("<b>"+props["Zipcode"]+" Zip Code</b></br>" +
+                layer.bindPopup("<b>"+props["ZipCode"]+" Zip Code</b></br>" +
                                 attribute + ": " +
-                                ((props[attribute]))+ ' kWh'); 
+                                ((props[attribute]))+ ' HCF'); 
                 
                 
                 //creates the mouse over effect
@@ -247,7 +262,6 @@
                 
             });
                 
-            updateLegend(breaks);
         }
         
         
@@ -291,50 +305,6 @@
             }
         }
             
-        
-                
-        // function to draw the legend
-        function drawLegend(){
-             
-            var legend = L.control({position: 'bottomright'});
-                // leaflet object and location
-            
-                    legend.onAdd = function () {
-                
-                        var div = L.DomUtil.create('div', 'legend');
-                        //this creates a HTML div called legend 
-               
-                return div;
-                        //returns out empty div container
-                
-                    
-            };
-                legend.addTo(map);
-                // adds it to the map
-        }
-        
-        
-        // function to update the legend
-        function updateLegend(breaks){
-            
-            var legend = $('.legend').html("<h3>Power use: " + attribute+ "</h3><ul>" );
-            ////'.'for class, assign variable legend to jquary class 
-            
-                for (var i=0; i< breaks.length-1; i++){
-                     //cycles through each of the breaks
-                    var color = getColor(breaks[i+1], breaks);
-                    //sets the color for each class break
-                        
-                        $('.legend ul').append('<li><span style="background:' + color + '"></span>'
-                            + (breaks[i]).toLocaleString() +  '&mdash; '
-                                + (breaks[i+1]).toLocaleString() + " (kWh)" +'</li>');
-        //adds the color swatch <span> tag, labels each span tag with the rounded string value of the breaks
-                
-            }
-                legend.append("</ul>")
-            //appends the ledgend with a ul tag
-        }
-       
 
          // function to create the range slider
          function createSliderUI(){
@@ -344,7 +314,7 @@
             
              sliderControl.onAdd = function(map){
                 
-                var slider = L.DomUtil.get('ui-controls')
+                var slider = L.DomUtil.get('slider')
                 //creates a dom element with an ID and class from above.    
                 
                     L.DomEvent.addListener(slider, 'mousedown',function(e){
@@ -363,12 +333,25 @@
                 
                 attribute = ($(this).val());
                 attribute +='/'+ (Number(attribute)+1)
-                console.log(attribute)
+                
                 //gets the value of a set of elements 
                 upDateMap()
                 
             })
         }
+            
+             //creates the UI drop down menue
+        function buildUI(){
+            
+            //jquary[]uses for ID,
+            $('select[id="ui-controls"]').change(function() {//event handler, fires when somebody chooses the attribute
+                  attribute = $(this).val();//gets the value of a set of elements                            
+                
+                drawMap(); //redraws the map with the new user data
+            });
+            
+        }
+        
         
         
         
