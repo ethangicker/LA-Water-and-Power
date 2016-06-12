@@ -16,7 +16,7 @@
     <link href='https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet' />
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
     <style>
-            body {
+        body {
             margin: 0;
             padding: 0;
         }
@@ -26,17 +26,13 @@
         }
         
         h1 {
-            position: absolute;
-            z-index: 100;
-            top: 10px;
-            right: 100px;
-            padding: 8px 15px;
+            padding: 8px 25px 8px 15px;
             margin: 0;
+            background: #1C9976;
             color: whitesmoke;
+            font-weight: 400;
             font-size: 1.5em;
-            background: rgba(25, 25, 25, 0.8);
-            border-radius: 5px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: right;
         }
         
         #map {
@@ -56,66 +52,24 @@
             color: #001323;
         }
         
-        .legend {
-            padding: 6px 8px;
-            font-size: 1em;
-            background: rgba(75, 75, 75, 0.8);
-            color: whitesmoke;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-            width: 170px;
-        }
-        
-        .legend label {
-            font-size: 1.1em;
-        }
-        
-        .legend label:after {
-            content: '';
-            display: block;
-            clear: both;
-        }
-        
-        .legend h3 {
-            font-size: 1.3em;
-            font-weight: bold;
-            line-height: 1em;
-            color: whitesmoke;
-            margin: 0;
-            text-align: center;
-        }
-        
-        .legend ul {
-            padding: 0 0 0 5px;
-        }
-        
-        .legend li {
-            list-style-type: none;
-            height: 22px;
-        }
-        
-        .legend span {
-            width: 30px;
-            height: 20px;
-            float: left;
-            margin-right: 10px;
-        }
-        
         .leaflet-popup-content {
             max-width: 160px;
         }
         
         #slider {
-            width: 176px;
+            position: 'bottomleft' width: 175px;
             padding: 8px 15px 8px 15px;
-            background: rgba(25, 25, 25, 0.8);
+            background: #424756;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             border-radius: 5px;
-            color: whitesmoke;
+            color: #e1d798;
+            opacity: .7;
         }
         
         .year-slider {
             width: 100%;
+            color: #e1d798;
+            background: #424756;
         }
         
         #slider .min {
@@ -139,27 +93,66 @@
         
         .info {
             position: absolute;
-            bottom: 25px;
-            right: 100px;
+            bottom: 150px;
+            left: 0px;
             padding: 6px 8px;
             font-size: 1em;
-            background: rgba(25, 25, 25, 0.8);
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            background: #424756;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             border-radius: 5px;
-            text-align: right; 
-            color: whitesmoke;
+            text-align: center;
+            color: #e1d798;
+            width: 350px;
+            opacity: .7;
         }
+        
         .info h3 {
             margin: 0;
-            
         }
+        
+        #side-panel {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 33%;
+            background: #6ea171;
+            opacity: .7;
+            border-left: 4px solid #e1d798;
+            overflow-y: scroll;
+        }
+        
+        #side-panel p {
+            margin: 8px 0 4px;
+            padding: 0 25px 0 15px;
+            color: #3d3d3d;
+            text-align: right;
+            font-size: 1em;
+        }
+        
+        #side-panel p:after {
+            content: '';
+            display: block;
+            clear: both;
+            font-family: "Work Sans", sans-serif;
+        }
+
     </style>
 
 </head>
 
 <body>
-    <h1>LA Power and Water Consumption</h1>
+
     <div id='map'></div>
+    <div id='side-panel'>
+        <h1>LA Power and Water Consumption</h1>
+        <h2>Average household consumption 2005-13</h2>
+        <h2>About this map</h2>
+        <p>This map illustrates the amount of water and electricity consumed on average by month of households within certain zip codes. Electricity is measured in kilowatt-hour (kWh) and water is measured in hundreds of cubic feet (HCF). </p>
+        <h2>About the data</h2>
+        <p>The data comes from Los Angeles County free open data portal. It only includes residential water and power customers serviced by Los Angeles utilities.</p>
+    </div>
+
 
     <div id='slider'>
         <label><span class="min">2005</span><span class="max">2013</span>
@@ -187,7 +180,7 @@
 
                 var dataLayer,
                     attribute = 'WaterUse';
-                    date = 'Date'
+                date = 'Date'
 
                 $.getJSON('la_zips.json', function(geoZip) {
 
@@ -249,7 +242,7 @@
                     upDateMap();
                     //buildUI(); 
                     buildCheckBox();
-                    
+
                     drawInfo();
 
                 }
@@ -278,19 +271,19 @@
 
 
                         //creates the mouse over effect
-                         layer.on('mouseover', function(){
-                    
-                    $('.info').show(); 
-                        // uses jquary$ to get county information, then showes it in the info window
-                    
-                    updateInfo(layer)//changes the info window
-                });
-                
-                layer.on('mouseout', function(){
-                    
-                    $('.info').hide(); //hides the information in the info window
-                    
-                });
+                        layer.on('mouseover', function() {
+
+                            $('.info').show();
+                            // uses jquary$ to get county information, then showes it in the info window
+
+                            updateInfo(layer) //changes the info window
+                        });
+
+                        layer.on('mouseout', function() {
+
+                            $('.info').hide(); //hides the information in the info window
+
+                        });
 
                         layer.on('mouseover', function() {
                             //highlights the zipcode when you mouse over it
@@ -298,8 +291,8 @@
                                 color: '#252525',
                                 weight: 4,
                             });
-                            
-                            
+
+
                             layer.bringToFront(); // bring feature to front of all layers
                         });
 
@@ -344,15 +337,15 @@
                 // function to get the color value based on the breaks above.
                 function getColor(d, breaks) {
                     if (d <= breaks[1]) {
-                        return '#fee5d9';
+                        return '#feedde';
                     } else if (d <= breaks[2]) {
-                        return '#fcae91';
+                        return '#fdbe85';
                     } else if (d <= breaks[3]) {
-                        return '#fb6a4a';
+                        return '#fd8d3c';
                     } else if (d <= breaks[4]) {
-                        return '#de2d26'
+                        return '#e6550d'
                     } else if (d <= breaks[5]) {
-                        return '#a50f15'
+                        return '#a63603'
                     }
                 }
 
@@ -379,6 +372,7 @@
                     }
 
                     sliderControl.addTo(map);
+
 
                     $('.year-slider')
                         //jquaery access to slider
@@ -413,38 +407,39 @@
                     });
 
                 }
-                
-                 //creates a empty info window 
-        function drawInfo(){
-            var info = L.control( {position: 'bottomright'} );
-            
-            info.onAdd = function(map){
-                
-                var div = L.DomUtil.create('div','info');
-                //creates a DOM element with a class of Div and Info
-                
-                return div;
-            }
-            
-            info.addTo(map); //adds it to the map
-            
-            $('.info').hide(); //use Jquary to hide the info window when we mouse off the map
-        }
-                
-                function updateInfo(layer){
-            
-            var props = layer.feature.properties;
-            
-            // uses html elements + the ID and classes
-            var html = "<h3>"+props.ZipCode +" Zip Code</h3>"+
-                "Average monthly household water use: <b>"+ props.WaterUse+ " HCF"+"</b><br>"+
-                "Average monthly household power use: <b>"+ props.PowerUse + " kWh"+ "</b><br>"
-                
 
-             $(".info").html(html);//turns our jquary info into html element
-            
-        }
-        
+                //creates a empty info window 
+                function drawInfo() {
+                    var info = L.control({
+                        position: 'bottomleft'
+                    });
+
+                    info.onAdd = function(map) {
+
+                        var div = L.DomUtil.create('div', 'info');
+                        //creates a DOM element with a class of Div and Info
+
+                        return div;
+                    }
+
+                    info.addTo(map); //adds it to the map
+
+                    $('.info').hide(); //use Jquary to hide the info window when we mouse off the map
+                }
+
+                function updateInfo(layer) {
+
+                    var props = layer.feature.properties;
+
+                    // uses html elements + the ID and classes
+                    var html = "<h3>" + props.ZipCode + " Zip Code</h3>" +
+                        "Average monthly household water use: <b>" + props.WaterUse + " HCF" + "</b><br>" +
+                        "Average monthly household power use: <b>" + props.PowerUse + " kWh" + "</b><br>"
+
+
+                    $(".info").html(html); //turns our jquary info into html element
+
+                }
 
             </script>
 </body>
