@@ -131,6 +131,7 @@
         <label>Choose water or power:</label>
         <select id="WaterUse">
             <option value="PowerUse" selected>Power used per household</option>
+            <option value="WaterUse" selected>Water used per household</option>
             </select>
     </div>
 
@@ -344,7 +345,7 @@
         function buildUI(){
             
             //jquary[]uses for ID,
-            $('select[id="ui-controls"]').change(function() {//event handler, fires when somebody chooses the attribute
+            $('select[id="WaterUse"]').change(function() {//event handler, fires when somebody chooses the attribute
                   attribute = $(this).val();//gets the value of a set of elements                            
                 
                 drawMap(); //redraws the map with the new user data
