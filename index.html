@@ -152,13 +152,13 @@
             });
             
             var dataLayer,
-            attribute = 'PowerUse';
-            
+            attribute = 'WaterUse';
+            date = 'Date'
 
            $.getJSON('la_zips.json', function(geoZip){
 
             
-               Papa.parse('WaterPower.csv',{
+               Papa.parse('WaterPowerCopy.csv',{
                 download : true, //maintains the format of the cvs
                 header : true,
                 complete : function(csvData) { 
@@ -332,8 +332,8 @@
             //jquaery access to slider
             .on('input change', function(){
                 
-                attribute = ($(this).val());
-                attribute +='/'+ (Number(attribute)+1)
+                date = ($(this).val());
+                date +='/'+ (Number(date)+1)
                 
                 //gets the value of a set of elements 
                 upDateMap()
