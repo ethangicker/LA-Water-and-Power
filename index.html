@@ -234,8 +234,7 @@
 
                     //one time calls
                     createSliderUI();
-                    upDateMap();
-                    //buildUI(); 
+                    upDateMap(); 
                     buildCheckBox();
 
                     drawInfo();
@@ -346,63 +345,44 @@
 
 
                 // function to create the range slider
-                function createSliderUI() {
-
-                    var sliderControl = L.control({
-                        position: 'bottomleft'
-                    });
-                    //positions the slider using leaflet control
-
-                    sliderControl.onAdd = function(map) {
-
-                        var slider = L.DomUtil.get('slider')
-                            //creates a dom element with an ID and class from above.    
-
-                        L.DomEvent.addListener(slider, 'mousedown', function(e) {
-                            //listens for the click events
-                            L.DomEvent.stopPropagation(e);
-                        }); //stops the click event
-
-                        return slider
-                    }
-
-                    sliderControl.addTo(map);
-
-
-                    sliderControl.addTo(map);
- 
-             $('.year-slider')
-                 //jquaery access to slider
-                 .on('input change', function() {
- 
-                     date = $(this).val();
-                     date += '/' + (Number(date) + 1)
- 
-                     //gets the value of a set of elements 
-                     upDateMap()
- 
-                 })
-                }
-
-                /* //creates the UI drop down menue
-        function buildUI(){
+                function createSliderUI(){
             
-            //jquary[]uses for ID,
-            $('select[id="WaterUse"]').change(function() {//event handler, fires when somebody chooses the attribute
-                  attribute = $(this).val();//gets the value of a set of elements                            
+        var sliderControl = L.control({position: 'bottomleft'});
+            //positions the slider using leaflet control
+            
+             sliderControl.onAdd = function(map){
                 
-                drawMap(); //redraws the map with the new user data
-            });
+                var slider = L.DomUtil.get('slider')
+                //creates a dom element with an ID and class from above.    
+                
+                    L.DomEvent.addListener(slider, 'mousedown',function(e){
+                       //listens for the click events
+                        L.DomEvent.stopPropagation(e);                     
+                });       //stops the click event
+                
+                return slider
+            }
             
-        }*/
-
+            sliderControl.addTo(map);
+            
+            $('.year-slider')
+            //jquaery access to slider
+            .on('input change', function(){
+                
+                attribute = ($(this).val());
+                //gets the value of a set of elements 
+                upDateMap()
+                
+            })
+        }
+        
                 function buildCheckBox() {
             $('#button input').change(function() {
  
  
                  attribute = $(this).val();
  
-                 console.log(attribute)
+                 console.log(attribute);
  
                  upDateMap(); //redraws the map with the new user data
  
