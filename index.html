@@ -158,23 +158,24 @@
         <label><span class="min">2005</span><span class="max">2013</span>
             <input type="range" min="2005" , max="2013" , value="2005" , step="1" , class="year-slider">
 
-        <form id="button">
-            <input type="radio" name="type" value="PowerUse">Power<br>
-            <input type="radio" name="type" value="WaterUse" checked>Water
-             </form>
+            <form id="button">
+                <input type="radio" name="type" value="PowerUse">Power
+                <br>
+                <input type="radio" name="type" value="WaterUse" checked>Water
+            </form>
             <script>
                 L.mapbox.accessToken = 'pk.eyJ1IjoiZWdpY2tyIiwiYSI6ImNpbndrOThibzE2bWJ1a2x5d2VmcmcweXMifQ.28keS-TMDnaPXR3dxInE_w';
 
                 var map = L.mapbox.map('map', 'mapbox.light', {
-             center: [34.029287, -118.284053],
-             zoom: 10,
-             minZoom: 8,
-             maxZoom: 12,
-             //maxBounds: L.latLngBounds([], [])
-         });
-            
+                    center: [34.029287, -118.284053],
+                    zoom: 10,
+                    minZoom: 8,
+                    maxZoom: 12,
+                    //maxBounds: L.latLngBounds([], [])
+                });
+
                 var dataLayer,
-                attribute = 'WaterUse';
+                    attribute = 'WaterUse';
                 date = 'Date'
 
                 $.getJSON('la_zips.json', function(geoZip) {
@@ -234,7 +235,7 @@
 
                     //one time calls
                     createSliderUI();
-                    upDateMap(); 
+                    upDateMap();
                     buildCheckBox();
 
                     drawInfo();
@@ -345,49 +346,51 @@
 
 
                 // function to create the range slider
-                function createSliderUI(){
-            
-        var sliderControl = L.control({position: 'bottomleft'});
-            //positions the slider using leaflet control
-            
-             sliderControl.onAdd = function(map){
-                
-                var slider = L.DomUtil.get('slider')
-                //creates a dom element with an ID and class from above.    
-                
-                    L.DomEvent.addListener(slider, 'mousedown',function(e){
-                       //listens for the click events
-                        L.DomEvent.stopPropagation(e);                     
-                });       //stops the click event
-                
-                return slider
-            }
-            
-            sliderControl.addTo(map);
-            
-            $('.year-slider')
-            //jquaery access to slider
-            .on('input change', function(){
-                
-                attribute = ($(this).val());
-                //gets the value of a set of elements 
-                upDateMap()
-                
-            })
-        }
-        
+                function createSliderUI() {
+
+                    var sliderControl = L.control({
+                        position: 'bottomleft'
+                    });
+                    //positions the slider using leaflet control
+
+                    sliderControl.onAdd = function(map) {
+
+                        var slider = L.DomUtil.get('slider')
+                            //creates a dom element with an ID and class from above.    
+
+                        L.DomEvent.addListener(slider, 'mousedown', function(e) {
+                            //listens for the click events
+                            L.DomEvent.stopPropagation(e);
+                        }); //stops the click event
+
+                        return slider
+                    }
+
+                    sliderControl.addTo(map);
+
+                    $('.year-slider')
+                        //jquaery access to slider
+                        .on('input change', function() {
+
+                            attribute = ($(this).val());
+                            //gets the value of a set of elements 
+                            upDateMap()
+
+                        })
+                }
+
                 function buildCheckBox() {
-            $('#button input').change(function() {
- 
- 
-                 attribute = $(this).val();
- 
-                 console.log(attribute);
- 
-                 upDateMap(); //redraws the map with the new user data
- 
-             });
- 
+                    $('#button input').change(function() {
+
+
+                        attribute = $(this).val();
+
+
+
+                        upDateMap(); //redraws the map with the new user data
+
+                    });
+
 
                 }
 
