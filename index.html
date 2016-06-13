@@ -158,28 +158,23 @@
         <label><span class="min">2005</span><span class="max">2013</span>
             <input type="range" min="2005" , max="2013" , value="2005" , step="1" , class="year-slider">
 
-            <div id="button">
-                <label>
-                    <input type="checkbox" value="PowerUse" checked>Power</label>
-                <br>
-                <label>
-                    <input type="checkbox" value="WaterUse" checked>Water</label>
-                <br>
-            </div>
-
+        <form id="button">
+            <input type="radio" name="type" value="PowerUse">Power<br>
+            <input type="radio" name="type" value="WaterUse" checked>Water
+             </form>
             <script>
                 L.mapbox.accessToken = 'pk.eyJ1IjoiZWdpY2tyIiwiYSI6ImNpbndrOThibzE2bWJ1a2x5d2VmcmcweXMifQ.28keS-TMDnaPXR3dxInE_w';
 
                 var map = L.mapbox.map('map', 'mapbox.light', {
-                    center: [34.029287, -118.284053],
-                    zoom: 10,
-                    minZoom: 8,
-                    maxZoom: 12,
-                    //maxBounds: L.latLngBounds([], [])
-                });
-
+             center: [34.029287, -118.284053],
+             zoom: 10,
+             minZoom: 8,
+             maxZoom: 12,
+             //maxBounds: L.latLngBounds([], [])
+         });
+            
                 var dataLayer,
-                    attribute = 'WaterUse';
+                attribute = 'WaterUse';
                 date = 'Date'
 
                 $.getJSON('la_zips.json', function(geoZip) {
@@ -374,17 +369,19 @@
                     sliderControl.addTo(map);
 
 
-                    $('.year-slider')
-                        //jquaery access to slider
-                        .on('input change', function() {
-
-                            date = ($(this).val());
-                            date += '/' + (Number(date) + 1)
-
-                            //gets the value of a set of elements 
-                            upDateMap()
-
-                        })
+                    sliderControl.addTo(map);
+ 
+             $('.year-slider')
+                 //jquaery access to slider
+                 .on('input change', function() {
+ 
+                     date = $(this).val();
+                     date += '/' + (Number(date) + 1)
+ 
+                     //gets the value of a set of elements 
+                     upDateMap()
+ 
+                 })
                 }
 
                 /* //creates the UI drop down menue
@@ -400,11 +397,17 @@
         }*/
 
                 function buildCheckBox() {
-                    $('input').on('#button'.change, function() {
-                        attribute = $(this).val();
-                        drawMap(); //redraws the map with the new user data
-
-                    });
+            $('#button input').change(function() {
+ 
+ 
+                 attribute = $(this).val();
+ 
+                 console.log(attribute)
+ 
+                 upDateMap(); //redraws the map with the new user data
+ 
+             });
+ 
 
                 }
 
