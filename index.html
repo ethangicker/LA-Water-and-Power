@@ -392,46 +392,50 @@
             upDateMap(); //redraws the map with the new user data
 
         });
+    }
 
 
         
         function infoWindow() {
 
-    var info = $('#info');
+            var info = $('#info');
 
-    geoZip.on('mouseover', function(e) {
-    var props = e.layer.feature.properties;
-       info.show();
-        $('#info span').text(props.ZipCode);
-        $(".PowerUse").text('(kWh '+String(PowerUse)+')');
-        $(".WaterUse").text('(HCF '+String(WaterUse)+')');
+            dataLayer.on('mouseover', function(e) {
+            var props = e.layer.feature.properties;
+               info.show();
+                $('#info span').text(props.ZipCode);
+                $(".PowerUse").text('(kWh '+String(PowerUse)+')');
+                $(".WaterUse").text('(HCF '+String(WaterUse)+')');
 
-        
 
-        e.layer.setStyle({ fillOpacity: .6 });
 
-    });
+                e.layer.setStyle({ fillOpacity: .6 });
 
-    geoZip.on('mouseout', function(e) {
-        info.hide();
-        e.layer.setStyle({ fillOpacity: 0 });
-    });
-}
+            });
+
+            dataLayer.on('mouseout', function(e) {
+                info.hide();
+                e.layer.setStyle({ fillOpacity: 0 });
+            });
+            
+            
+            $(document).mousemove(function(e){
+                // first offset from the mouse position of the info window
+                info.css({"left": e.pageX + 6, "top": e.pageY - info.height() - 15}); 
+
+                // if it crashes into the top, flip it lower right
+                if(info.offset().top < 4) {
+                    info.css({"top": e.pageY + 15});
+                }
+                // do the same for crashing into the right
+                if(info.offset().left + info.width() >= $(document).width() - 40) {
+                    info.css({"left": e.pageX - info.width() - 30});
+                }
+            });
+        } // end infoWindow
     
         
-    $(document).mousemove(function(e){
-    // first offset from the mouse position of the info window
-    info.css({"left": e.pageX + 6, "top": e.pageY - info.height() - 15}); 
 
-    // if it crashes into the top, flip it lower right
-    if(info.offset().top < 4) {
-        info.css({"top": e.pageY + 15});
-    }
-    // do the same for crashing into the right
-    if(info.offset().left + info.width() >= $(document).width() - 40) {
-        info.css({"left": e.pageX - info.width() - 30});
-    }
-});
 
    
 
