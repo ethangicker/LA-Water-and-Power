@@ -82,8 +82,8 @@
         }
         
         #ui-controls {
-            left: 250px;
-            bottom: 20px;
+            left:25%;
+            bottom: 500px;
             position: absolute;
             background: rgba(75,75,75,0.8);
             padding: 6px 8px;
@@ -95,6 +95,7 @@
             position: absolute; 
             max-width: 200px;
             background: #6ea171;
+            display: none;
             border: 2px solid #d3d3d3;
             padding: 8px 15px;
             border-radius: 3px;
@@ -191,11 +192,11 @@
         <p> Map Built By Ethan Gicker</p>
     </div>
    
-    <div id="info">
-    <p>Zip Code: <span></span></p>
-    <p class="PowerUse">Power Use <span></span>: <span></span></p>
-    <p class="WaterUse">Water Use <span></span>: <span></span></p>
-</div>
+    <div id='info'>
+        <p>Zip Code: <span></span></p>
+        <p class="PowerUse">Power Use <span></span>: <span></span></p>
+        <p class="WaterUse">Water Use <span></span>: <span></span></p>
+     </div>
 
 
     <div id='slider'>
@@ -217,7 +218,6 @@
         zoom: 10,
         minZoom: 8,
         maxZoom: 12,
-        //maxBounds: L.latLngBounds([], [])
     });
 
     var dataLayer,
@@ -226,8 +226,7 @@
     var messaging_legend_attr = {
             'PowerUse': 'Power Use (kWh)',
             'WaterUse': 'Water Use (HCF)',
-            
-        };
+            };
 
     $.getJSON('la_zips.json', function(geoZip) {
 
@@ -277,7 +276,7 @@
                     return {
                         color: 'white',
                         weight: 1,
-                        fillOpacity: .6,
+                        fillOpacity: .7,
                         fillColor: '#1f78b4'
                     }
                 }
@@ -286,10 +285,11 @@
 
         //one time calls
         createSliderUI();
+        infoWindow();
         drawLegend();
         upDateMap();
         buildCheckBox();
-        infoWindow();
+        
 
     }
 
@@ -310,9 +310,7 @@
                     //sets the style of the layer based on the attribute 
             })
 
-           
-
-            layer.on('mouseover', function() {
+           layer.on('mouseover', function() {
                 //highlights the zipcode when you mouse over it
                 layer.setStyle({
                     color: '#252525',
@@ -455,32 +453,24 @@
 
     function buildCheckBox() {
         $('#button input').change(function() {
-
-
             attribute = $(this).val();
-
-
-
             upDateMap(); //redraws the map with the new user data
 
         });
     }
 
-    
-        
-        function infoWindow() {
+    function infoWindow() {
 
             var info = $('#info');
-
-
+            
             dataLayer.on('mouseover', function(e) {
-            var props = e.layer.feature.properties;
-               info.show();
-                $('#info span').text(props.ZipCode);
-                $(".PowerUse").text('kWh '+String(props.PowerUse));
-                $(".WaterUse").text('HCF '+String(props.WaterUse));
+                var props = e.layer.feature.properties;
+                   info.show();
+                    $('#info span').text(props.ZipCode);
+                    $(".PowerUse").text('kWh '+String(props.PowerUse));
+                    $(".WaterUse").text('HCF '+String(props.WaterUse));
 
-                e.layer.setStyle({ fillOpacity: .7 });
+                    e.layer.setStyle({ fillOpacity: .7 });
             });
 
             dataLayer.on('mouseout', function(e) {
@@ -503,13 +493,6 @@
                 }
             });
         } // end infoWindow
-
-    
-        
-
-
-   
-
-</script>
+    </script>
 </body>
 </html>
