@@ -8,7 +8,6 @@
     <script src='https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/simple-statistics/1.0.0/simple_statistics.min.js"></script>
 
     <link href='https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet' />
@@ -38,6 +37,7 @@
             width: 100%;
             top: 0;
             bottom: 0;
+            z-index: 1;
         }
         
         footer {
@@ -79,15 +79,14 @@
         }
         
         #ui-controls {
-            margin-left: 10%;
+            left: 250px;
+            bottom: 20px;
             position: absolute;
-            background: rgba(25, 25, 25, 0.8);
+            background: grey;
+            padding: 6px 8px;
+            z-index: 10
         }
         
-        #ui-controls lable {
-            font-size: 1.1em;
-            margin-right: 10px;
-        }
         
         #info {
             position: absolute; 
@@ -104,7 +103,6 @@
             margin: 3px 0 4px;
             color: whitesmoke;
         }
-                }
         
         #side-panel {
             position: absolute;
@@ -116,6 +114,7 @@
             opacity: .8;
             border-left: 4px solid #e1d798;
             overflow-y: scroll;
+            z-index: 10;
         }
         
         #side-panel p {
@@ -141,6 +140,7 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border-radius: 5px;
             width: 170px;
+            z-index: 100;
     }
         .legend label {
             font-size: 1.1em;
@@ -185,26 +185,25 @@
         <h2>About this map</h2>
         <p>This map illustrates the amount of water and electricity consumed on average by month of households within certain zip codes. Electricity is measured in kilowatt-hour (kWh) and water is measured in hundreds of cubic feet (HCF). </p>
         <h2>About the data</h2>
-        <p>The data comes from Los Angeles County free open data portal. It only includes residential water and power customers serviced by Los Angeles utilities.<br>
-        
-            Map Built By Ethan Gicker</p>
+        <p>The data comes from Los Angeles County free open data portal. It only includes residential water and power customers serviced by Los Angeles utilities.</p>
+        <p>Map Built By Ethan Gicker</p>
     </div>
     <div id="info">
-    <p>Zip Code: <span></span></p>
-    <p class="PowerUse">Power Use <span></span>: <span></span></p>
-    <p class="WaterUse">Water Use <span></span>: <span></span></p>
-</div>
-
+        <p>Zip Code: <span></span></p>
+        <p class="PowerUse">Power Use <span></span>: <span></span></p>
+        <p class="WaterUse">Water Use <span></span>: <span></span></p>
+    </div>
 
     <div id='slider'>
         <label><span class="min">2005</span><span class="max">2013</span>
             <input type="range" min="2005" , max="2013" , value="2005" , step="1" , class="year-slider"></label>
-
-            <form id="button">
-                <input type="radio" name="type" value="PowerUse">Power
-                <br>
-                <input type="radio" name="type" value="WaterUse" checked>Water
-            </form>
+    </div>
+    <div id='ui-controls'>
+        <form id="button">
+            <input type="radio" name="type" value="PowerUse">Power
+            <br>
+            <input type="radio" name="type" value="WaterUse" checked>Water
+        </form>
     </div>
 <script>
     L.mapbox.accessToken = 'pk.eyJ1IjoiZWdpY2tyIiwiYSI6ImNpbndrOThibzE2bWJ1a2x5d2VmcmcweXMifQ.28keS-TMDnaPXR3dxInE_w';
@@ -242,8 +241,6 @@
 
     // function to process/bind data
     function processData(geoZip, csvData) {
-
-
 
         for (var zipcode in geoZip.features) {
             //looping structure to loop through the arrays of zip codes
@@ -390,7 +387,7 @@
                 
                     
             };
-                legend.addTo(map);
+            legend.addTo(map);
                 // adds it to the map
         }
         
