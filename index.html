@@ -64,11 +64,8 @@
             opacity: .8;
         }
         
-        .year-slider {
-            width: 100%;
-            color: #e1d798;
-            background: #424756;
-        }
+    
+        
         
         #slider .min {
             float: left;
@@ -78,30 +75,33 @@
             float: right;
         }
         
-        #ui-controls {
+        #button {
             margin-left: 10%;
-            position: absolute;
-            background: rgba(25, 25, 25, 0.8);
+            position:'topleft';
+            background: #6ea171;
         }
         
-        #ui-controls lable {
+        #button lable {
             font-size: 1.1em;
             margin-right: 10px;
         }
         
         #info {
-            position: absolute; 
+            padding: 8px 15px;
+            background: #6ea171;
+            border: 2px solid #e1d798;
+            border-radius: 3px; 
+            color: #1C9976;
+            position: absolute;
+            font-size: 1em;  
             max-width: 200px;
-            right: 15px;
-            top: 15px;
-            display: none;
-            background: whitesmoke;
-            border: 2px solid #d3d3d3;
-            padding: 2px 6px;
+            opacity: .8;
+            
         }
 
         #info p {
             margin: 3px 0 4px;
+            color: whitesmoke;
         }
                 }
         
@@ -125,12 +125,7 @@
             font-size: 1em;
         }
         
-        #side-panel p:after {
-            content: '';
-            display: block;
-            clear: both;
-            font-family: "Work Sans", sans-serif;
-        }
+        
 
     </style>
 
@@ -139,6 +134,13 @@
 <body>
 
     <div id='map'></div>
+    
+    <div id="info">
+    <p>Zip Code: <span></span></p>
+    <p class="PowerUse">Power Use <span></span>: <span></span></p>
+    <p class="WaterUse">Water Use <span></span>: <span></span></p>
+</div>
+    
     <div id='side-panel'>
         <h1>LA Power and Water Consumption</h1>
         <h2>Average household consumption 2005-13</h2>
@@ -149,11 +151,8 @@
         
             Map Built By Ethan Gicker</p>
     </div>
-    <div id="info">
-    <p>Zip Code: <span></span></p>
-    <p class="PowerUse">Power Use <span></span>: <span></span></p>
-    <p class="WaterUse">Water Use <span></span>: <span></span></p>
-</div>
+    
+   
 
 
     <div id='slider'>
@@ -166,8 +165,10 @@
                 <input type="radio" name="type" value="WaterUse" checked>Water
             </form>
     </div>
-<script>
-    L.mapbox.accessToken = 'pk.eyJ1IjoiZWdpY2tyIiwiYSI6ImNpbndrOThibzE2bWJ1a2x5d2VmcmcweXMifQ.28keS-TMDnaPXR3dxInE_w';
+
+    <script>
+    
+        L.mapbox.accessToken = 'pk.eyJ1IjoiZWdpY2tyIiwiYSI6ImNpbndrOThibzE2bWJ1a2x5d2VmcmcweXMifQ.28keS-TMDnaPXR3dxInE_w';
 
     var map = L.mapbox.map('map', 'mapbox.light', {
         center: [34.029287, -118.284053],
@@ -261,13 +262,13 @@
                     //sets the style of the layer based on the attribute 
             })
 
-            //binds the popup to the layer and calculates it to show a readable number 
+            /*//binds the popup to the layer and calculates it to show a readable number 
             layer.bindPopup("<b>" + props["ZipCode"] + " Zip Code</b></br>" +
                 attribute + ": " +
-                ((props[attribute])) + ' HCF');
+                ((props[attribute])) + ' HCF');*/
 
 
-            //creates the mouse over effect
+            /*//creates the mouse over effect
             layer.on('mouseover', function() {
 
                 //$('.info').show();
@@ -281,7 +282,7 @@
                 //$('.info').hide(); //hides the information in the info window
 
             });
-
+*/
             layer.on('mouseover', function() {
                 //highlights the zipcode when you mouse over it
                 layer.setStyle({
@@ -404,8 +405,8 @@
             var props = e.layer.feature.properties;
                info.show();
                 $('#info span').text(props.ZipCode);
-                $(".PowerUse").text('(kWh '+String()+')');
-                $(".WaterUse").text('(HCF '+String()+')');
+                $(".PowerUse").text('kWh '+String(props.PowerUse));
+                $(".WaterUse").text('HCF '+String(props.WaterUse));
 
 
 
