@@ -393,13 +393,13 @@
 
         });
 
-
+    }
         
         function infoWindow() {
 
     var info = $('#info');
 
-    geoZip.on('mouseover', function(e) {
+    dataLayer.on('mouseover', function(e) {
     var props = e.layer.feature.properties;
        info.show();
         $('#info span').text(props.ZipCode);
@@ -412,7 +412,7 @@
 
     });
 
-    geoZip.on('mouseout', function(e) {
+    dataLayer.on('mouseout', function(e) {
         info.hide();
         e.layer.setStyle({ fillOpacity: 0 });
     });
