@@ -95,13 +95,14 @@
             right: 15px;
             top: 15px;
             display: none;
-            background: whitesmoke;
+            background: #6ea171;
             border: 2px solid #d3d3d3;
             padding: 2px 6px;
         }
 
         #info p {
             margin: 3px 0 4px;
+            color: whitesmoke;
         }
                 }
         
@@ -131,6 +132,45 @@
             clear: both;
             font-family: "Work Sans", sans-serif;
         }
+        
+        .legend {
+            padding: 6px 8px;
+            font-size: 1em;
+            background: rgba(75,75,75,0.8);
+            color: whitesmoke;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            width: 170px;
+    }
+        .legend label {
+            font-size: 1.1em;
+    }
+        .legend label:after {
+            content: '';
+            display: block;
+            clear: both;
+    }
+        .legend h3 {
+            font-size: 1.3em;
+            font-weight: bold;
+            line-height: 1em;
+            color: whitesmoke;
+            margin: 0;
+            text-align: center;
+    }
+        .legend ul {
+            padding: 0 0 0 5px;
+        }
+        .legend li {
+            list-style-type: none;
+            height: 22px;
+    }
+        .legend span {
+            width: 30px;
+            height: 20px;
+            float: left;
+            margin-right: 10px;
+    }
 
     </style>
 
@@ -179,7 +219,12 @@
 
     var dataLayer,
         attribute = 'WaterUse';
-    date = 'Date'
+    
+    var messaging_legend_attr = {
+            'PowerUse': 'Power Use (kWh)',
+            'WaterUse': 'Water Use (HCF)',
+            
+        };
 
     $.getJSON('la_zips.json', function(geoZip) {
 
@@ -238,6 +283,7 @@
 
         //one time calls
         createSliderUI();
+        drawLegend();
         upDateMap();
         buildCheckBox();
         infoWindow();
@@ -261,26 +307,7 @@
                     //sets the style of the layer based on the attribute 
             })
 
-            //binds the popup to the layer and calculates it to show a readable number 
-            layer.bindPopup("<b>" + props["ZipCode"] + " Zip Code</b></br>" +
-                attribute + ": " +
-                ((props[attribute])) + ' HCF');
-
-
-            //creates the mouse over effect
-            layer.on('mouseover', function() {
-
-                //$('.info').show();
-                // uses jquary$ to get county information, then showes it in the info window
-
-                //updateInfo(layer) //changes the info window
-            });
-
-            layer.on('mouseout', function() {
-
-                //$('.info').hide(); //hides the information in the info window
-
-            });
+           
 
             layer.on('mouseover', function() {
                 //highlights the zipcode when you mouse over it
@@ -302,7 +329,7 @@
             });
 
         });
-
+        updateLegend(breaks);
     }
 
 
@@ -346,6 +373,48 @@
         }
     }
 
+    
+     // function to draw the legend
+        function drawLegend(){
+             
+            var legend = L.control({position: 'bottomright'});
+                // leaflet object and location
+            
+                    legend.onAdd = function () {
+                
+                        var div = L.DomUtil.create('div', 'legend');
+                        //this creates a HTML div called legend 
+               
+                return div;
+                        //returns out empty div container
+                
+                    
+            };
+                legend.addTo(map);
+                // adds it to the map
+        }
+        
+        
+        // function to update the legend
+        function updateLegend(breaks){
+            
+            var legend = $('.legend').html("<h3>Utilities: " + messaging_legend_attr[attribute]+ "</h3><ul>" );
+            ////'.'for class, assign variable legend to jquary class 
+            
+                for (var i=0; i< breaks.length-1; i++){
+                     //cycles through each of the breaks
+                    var color = getColor(breaks[i+1], breaks);
+                    //sets the color for each class break
+                        
+                        $('.legend ul').append('<li><span style="background:' + color + '"></span>'
+                            + (breaks[i]).toLocaleString() +  '&mdash; '
+                                + (breaks[i+1]).toLocaleString() +'</li>');
+        //adds the color swatch <span> tag, labels each span tag with the rounded string value of the breaks
+                
+            }
+                legend.append("</ul>")
+            //appends the ledgend with a ul tag
+        }
 
     // function to create the range slider
     function createSliderUI() {
@@ -394,7 +463,7 @@
         });
     }
 
-    }
+    
         
         function infoWindow() {
 
@@ -405,8 +474,8 @@
             var props = e.layer.feature.properties;
                info.show();
                 $('#info span').text(props.ZipCode);
-                $(".PowerUse").text('(kWh '+String(PowerUse)+')');
-                $(".WaterUse").text('(HCF '+String(WaterUse)+')');
+                $(".PowerUse").text('kWh '+String(props.PowerUse));
+                $(".WaterUse").text('HCF '+String(props.WaterUse));
 
                 e.layer.setStyle({ fillOpacity: .7 });
 
