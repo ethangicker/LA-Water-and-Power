@@ -395,23 +395,33 @@
         });
     }
 
-
+    }
         
         function infoWindow() {
 
             var info = $('#info');
 
+<<<<<<< HEAD
             dataLayer.on('mouseover', function(e) {
             var props = e.layer.feature.properties;
                info.show();
                 $('#info span').text(props.ZipCode);
                 $(".PowerUse").text('(kWh '+String(PowerUse)+')');
                 $(".WaterUse").text('(HCF '+String(WaterUse)+')');
+=======
+    dataLayer.on('mouseover', function(e) {
+    var props = e.layer.feature.properties;
+       info.show();
+        $('#info span').text(props.ZipCode);
+        $(".PowerUse").text('(kWh '+String(PowerUse)+')');
+        $(".WaterUse").text('(HCF '+String(WaterUse)+')');
+>>>>>>> gh-pages
 
 
 
                 e.layer.setStyle({ fillOpacity: .6 });
 
+<<<<<<< HEAD
             });
 
             dataLayer.on('mouseout', function(e) {
@@ -434,6 +444,13 @@
                 }
             });
         } // end infoWindow
+=======
+    dataLayer.on('mouseout', function(e) {
+        info.hide();
+        e.layer.setStyle({ fillOpacity: 0 });
+    });
+}
+>>>>>>> gh-pages
     
         
 
