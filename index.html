@@ -89,24 +89,21 @@
             margin-right: 10px;
         }
         
-        .info {
-            position: absolute;
-            bottom: 150px;
-            left: 0px;
-            padding: 6px 8px;
-            font-size: 1em;
-            background: #424756;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-            text-align: center;
-            color: #e1d798;
-            width: 350px;
-            opacity: .8;
+        #info {
+            position: absolute; 
+            max-width: 200px;
+            right: 15px;
+            top: 15px;
+            display: none;
+            background: whitesmoke;
+            border: 2px solid #d3d3d3;
+            padding: 2px 6px;
         }
-        
-        .info h3 {
-            margin: 0;
+
+        #info p {
+            margin: 3px 0 4px;
         }
+                }
         
         #side-panel {
             position: absolute;
@@ -152,6 +149,11 @@
         
             Map Built By Ethan Gicker</p>
     </div>
+    <div id="info">
+    <p>Zip Code: <span></span></p>
+    <p class="PowerUse">Power Use <span></span>: <span></span></p>
+    <p class="WaterUse">Water Use <span></span>: <span></span></p>
+</div>
 
 
     <div id='slider'>
@@ -238,8 +240,7 @@
         createSliderUI();
         upDateMap();
         buildCheckBox();
-
-        drawInfo();
+        infoWindow();
 
     }
 
@@ -269,15 +270,15 @@
             //creates the mouse over effect
             layer.on('mouseover', function() {
 
-                $('.info').show();
+                //$('.info').show();
                 // uses jquary$ to get county information, then showes it in the info window
 
-                updateInfo(layer) //changes the info window
+                //updateInfo(layer) //changes the info window
             });
 
             layer.on('mouseout', function() {
 
-                $('.info').hide(); //hides the information in the info window
+                //$('.info').hide(); //hides the information in the info window
 
             });
 
@@ -393,8 +394,32 @@
         });
 
 
-    }
-    $('.info').mousemove(function(e){
+        
+        function infoWindow() {
+
+    var info = $('#info');
+
+    geoZip.on('mouseover', function(e) {
+    var props = e.layer.feature.properties;
+       info.show();
+        $('#info span').text(props.ZipCode);
+        $(".PowerUse").text('(kWh '+String(PowerUse)+')');
+        $(".WaterUse").text('(HCF '+String(WaterUse)+')');
+
+        
+
+        e.layer.setStyle({ fillOpacity: .6 });
+
+    });
+
+    geoZip.on('mouseout', function(e) {
+        info.hide();
+        e.layer.setStyle({ fillOpacity: 0 });
+    });
+}
+    
+        
+    $(document).mousemove(function(e){
     // first offset from the mouse position of the info window
     info.css({"left": e.pageX + 6, "top": e.pageY - info.height() - 15}); 
 
@@ -408,38 +433,7 @@
     }
 });
 
-    /*//creates a empty info window 
-    function drawInfo() {
-        var info = L.control({
-            position: 'bottomleft'
-        });
-
-        info.onAdd = function(map) {
-
-            var div = L.DomUtil.create('div', 'info');
-            //creates a DOM element with a class of Div and Info
-
-            return div;
-        }
-
-        info.addTo(map); //adds it to the map
-
-        $('.info').hide(); //use Jquary to hide the info window when we mouse off the map
-    }
-
-    function updateInfo(layer) {
-
-        var props = layer.feature.properties;
-
-        // uses html elements + the ID and classes
-        var html = "<h3>" + props.ZipCode + " Zip Code</h3>" +
-            "Average monthly household water use: <b>" + props.WaterUse + " HCF" + "</b><br>" +
-            "Average monthly household power use: <b>" + props.PowerUse + " kWh" + "</b><br>"
-
-
-        $(".info").html(html); //turns our jquary info into html element
-
-    }*/
+   
 
 </script>
 </body>
