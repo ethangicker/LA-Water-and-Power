@@ -61,7 +61,7 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             border-radius: 5px;
             color: #e1d798;
-            opacity: .7;
+            opacity: .8;
         }
         
         .year-slider {
@@ -101,7 +101,7 @@
             text-align: center;
             color: #e1d798;
             width: 350px;
-            opacity: .7;
+            opacity: .8;
         }
         
         .info h3 {
@@ -115,7 +115,7 @@
             bottom: 0;
             width: 33%;
             background: #6ea171;
-            opacity: .7;
+            opacity: .8;
             border-left: 4px solid #e1d798;
             overflow-y: scroll;
         }
@@ -123,7 +123,7 @@
         #side-panel p {
             margin: 8px 0 4px;
             padding: 0 25px 0 15px;
-            color: #3d3d3d;
+            color: whitesmoke;
             text-align: right;
             font-size: 1em;
         }
@@ -148,7 +148,9 @@
         <h2>About this map</h2>
         <p>This map illustrates the amount of water and electricity consumed on average by month of households within certain zip codes. Electricity is measured in kilowatt-hour (kWh) and water is measured in hundreds of cubic feet (HCF). </p>
         <h2>About the data</h2>
-        <p>The data comes from Los Angeles County free open data portal. It only includes residential water and power customers serviced by Los Angeles utilities.</p>
+        <p>The data comes from Los Angeles County free open data portal. It only includes residential water and power customers serviced by Los Angeles utilities.<br>
+        
+            Map Built By Ethan Gicker</p>
     </div>
 
 
@@ -225,7 +227,7 @@
                     return {
                         color: 'white',
                         weight: 1,
-                        fillOpacity: .5,
+                        fillOpacity: .6,
                         fillColor: '#1f78b4'
                     }
                 }
@@ -392,8 +394,21 @@
 
 
     }
+    $('.info').mousemove(function(e){
+    // first offset from the mouse position of the info window
+    info.css({"left": e.pageX + 6, "top": e.pageY - info.height() - 15}); 
 
-    //creates a empty info window 
+    // if it crashes into the top, flip it lower right
+    if(info.offset().top < 4) {
+        info.css({"top": e.pageY + 15});
+    }
+    // do the same for crashing into the right
+    if(info.offset().left + info.width() >= $(document).width() - 40) {
+        info.css({"left": e.pageX - info.width() - 30});
+    }
+});
+
+    /*//creates a empty info window 
     function drawInfo() {
         var info = L.control({
             position: 'bottomleft'
@@ -424,7 +439,7 @@
 
         $(".info").html(html); //turns our jquary info into html element
 
-    }
+    }*/
 
 </script>
 </body>
