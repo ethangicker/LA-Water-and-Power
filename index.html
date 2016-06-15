@@ -221,7 +221,8 @@
     });
 
     var dataLayer,
-        attribute = 'WaterUse';
+        currentAttribute = 'WaterUse',
+        currentYear = '2005';
     
     var messaging_legend_attr = {
             'PowerUse': 'Power Use (kWh)',
@@ -249,7 +250,10 @@
 
         for (var zipcode in geoZip.features) {
             //looping structure to loop through the arrays of zip codes
-
+            
+            // create a new empty object to hold all data
+            geoZip.features[zipcode].properties.data = {};
+            
             var props = geoZip.features[zipcode].properties;
 
             for (d in csvData.data) {
@@ -257,9 +261,15 @@
 
                 if (String(props.Zip_Num) === csvData.data[d].ZipCode) {
                     //matches csv data and zip areas
-
-                    geoZip.features[zipcode].properties = csvData.data[d];
-                    break; // breaks out of the looping structure
+                    
+                    // store water and power data for that year
+                    geoZip.features[zipcode].properties.data[csvData.data[d].Date] = {
+                        "WaterUse" : csvData.data[d].WaterUse,
+                        "PowerUse" : csvData.data[d].PowerUse
+                    }
+                 
+                    //geoZip.features[zipcode].properties = csvData.data[d];
+                 
                 }
             } //end of inner loop
 
@@ -270,7 +280,7 @@
 
     // function to draw the map
     function drawMap(geoZip) {
-
+       
         dataLayer = L.geoJson(geoZip, { //convert json to leaflet
                 style: function(feature) {
                     return {
@@ -278,6 +288,13 @@
                         weight: 1,
                         fillOpacity: .7,
                         fillColor: '#1f78b4'
+                    }
+                },
+                filter : function(feature, layer) {
+                    
+                    // only keep feature with data
+                    if(feature.properties.data[2005] != undefined) {
+                        return feature;
                     }
                 }
             })
@@ -306,7 +323,7 @@
             //asings the variable for layer properties
 
             layer.setStyle({
-                fillColor: getColor(Number(layer.feature.properties[attribute]), breaks)
+                fillColor: getColor(Number(layer.feature.properties.data[currentYear][currentAttribute]), breaks)
                     //sets the style of the layer based on the attribute 
             })
 
@@ -342,8 +359,9 @@
 
         dataLayer.eachLayer(function(layer) {
             //loops though each layer
-            if (layer.feature.properties[attribute]) {
-                var value = Number(layer.feature.properties[attribute]);
+            
+            if (layer.feature.properties.data[currentYear][currentAttribute]) {
+                var value = Number(layer.feature.properties.data[currentYear][currentAttribute]);
                 values.push(value);
             }
 
@@ -399,7 +417,7 @@
         // function to update the legend
         function updateLegend(breaks){
             
-            var legend = $('.legend').html("<h3>Utilities: " + messaging_legend_attr[attribute]+ "</h3><ul>" );
+            var legend = $('.legend').html("<h3>Utilities: " + messaging_legend_attr[currentAttribute]+ "</h3><ul>" );
             ////'.'for class, assign variable legend to jquary class 
             
                 for (var i=0; i< breaks.length-1; i++){
@@ -444,7 +462,7 @@
             //jquaery access to slider
             .on('input change', function() {
 
-                attribute = ($(this).val());
+                currentYear = $(this).val();
                 //gets the value of a set of elements 
                 upDateMap()
 
