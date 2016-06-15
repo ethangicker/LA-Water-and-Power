@@ -405,6 +405,7 @@
             var props = e.layer.feature.properties;
                info.show();
                 $('#info span').text(props.ZipCode);
+<<<<<<< HEAD
                 $(".PowerUse").text('kWh '+String(props.PowerUse));
                 $(".WaterUse").text('HCF '+String(props.WaterUse));
 
@@ -420,6 +421,15 @@
     });
 
 
+=======
+                $(".PowerUse").text('(kWh '+String(PowerUse)+')');
+                $(".WaterUse").text('(HCF '+String(WaterUse)+')');
+
+
+
+                e.layer.setStyle({ fillOpacity: .6 });
+
+>>>>>>> origin/gh-pages
             });
 
             dataLayer.on('mouseout', function(e) {
@@ -442,7 +452,10 @@
                 }
             });
         } // end infoWindow
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/gh-pages
     
         
 
