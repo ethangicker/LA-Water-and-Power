@@ -83,7 +83,7 @@
         
         #ui-controls {
             left:25%;
-            bottom: 500px;
+            bottom: 625px;
             position: absolute;
             background: rgba(75,75,75,0.8);
             padding: 6px 8px;
@@ -94,20 +94,18 @@
         #info {
             position: absolute; 
             max-width: 200px;
-            background: #6ea171;
+            right: 15px;
+            top: 15px;
             display: none;
+            background: whitesmoke;
             border: 2px solid #d3d3d3;
-            padding: 8px 15px;
-            border-radius: 3px;
-            font-size: 1em;  
-            max-width: 200px;
+            padding: 2px 6px;
         }
 
         #info p {
             margin: 3px 0 4px;
-            color: whitesmoke;
         }
-                
+
         
         #side-panel {
             position: absolute;
@@ -192,7 +190,7 @@
         <p> Map Built By Ethan Gicker</p>
     </div>
    
-    <div id='info'>
+    <div id="info">
         <p>Zip Code: <span></span></p>
         <p class="PowerUse">Power Use <span></span>: <span></span></p>
         <p class="WaterUse">Water Use <span></span>: <span></span></p>
@@ -471,7 +469,7 @@
 
     function buildCheckBox() {
         $('#button input').change(function() {
-            attribute = $(this).val();
+            currentAttribute = $(this).val();
             upDateMap(); //redraws the map with the new user data
 
         });
