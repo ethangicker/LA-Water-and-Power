@@ -300,10 +300,11 @@
 
         //one time calls
         createSliderUI();
-        infoWindow();
         drawLegend();
+        infoWindow();
         upDateMap();
         buildCheckBox();
+        
         
 
     }
@@ -487,6 +488,7 @@
                     $(".WaterUse").text('HCF '+String(props.WaterUse));
 
                     e.layer.setStyle({ fillOpacity: .7 });
+               
             });
 
             dataLayer.on('mouseout', function(e) {
