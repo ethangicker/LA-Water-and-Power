@@ -101,7 +101,7 @@
             border: 2px solid #d3d3d3;
             padding: 2px 6px;
             z-index: 10;
-            opacity: .8;
+            opacity: .9;
         }
 
         #info p {
@@ -117,7 +117,7 @@
             bottom: 0;
             width: 33%;
             background: #6ea171;
-            opacity: .8;
+            opacity: .9;
             border-left: 4px solid 'whitesmoke';
             overflow-y: scroll;
             z-index: 10;
@@ -190,7 +190,7 @@
         <p>This map illustrates the amount of water and electricity consumed on average by month of households within certain zip codes. Electricity is measured in kilowatt-hour (kWh) and water is measured in hundreds of cubic feet (HCF). </p>
         <h2>About the data</h2>
         <p>The data comes from Los Angeles County free open data portal. It only includes residential water and power customers serviced by Los Angeles utilities.</p>
-        <p> <li> Built by <a target='_blank' href=https://github.com/ethangicker/ethangicker.github.io>Ethan Gicker</a></li></p>
+        <p> <li> Built by <a target='_blank' href=https://ethangicker.github.io>Ethan Gicker</a></li></p>
     </div>
    
     <div id="info">
@@ -214,7 +214,7 @@
 <script>
     L.mapbox.accessToken = 'pk.eyJ1IjoiZWdpY2tyIiwiYSI6ImNpbndrOThibzE2bWJ1a2x5d2VmcmcweXMifQ.28keS-TMDnaPXR3dxInE_w';
 
-    var map = L.mapbox.map('map', 'mapbox.light', {
+    var map = L.mapbox.map('map', 'mapbox.dark', {
         center: [34.029287, -118.284053],
         zoom: 10,
         minZoom: 9,
@@ -291,7 +291,7 @@
                     return {
                         color: 'white',
                         weight: 1,
-                        fillOpacity: .7,
+                        fillOpacity: .8,
                         fillColor: '#1f78b4'
                     }
                 },
@@ -496,13 +496,13 @@
                 
                 console.log(props);
 
-                    e.layer.setStyle({ fillOpacity: .7 });
+                    e.layer.setStyle({ fillOpacity: .8 });
                
             });
 
             dataLayer.on('mouseout', function(e) {
                 info.hide();
-                e.layer.setStyle({ fillOpacity: .7 });
+                e.layer.setStyle({ fillOpacity: .8 });
             });
             
             
