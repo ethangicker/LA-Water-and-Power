@@ -97,13 +97,16 @@
             right: 15px;
             top: 15px;
             display: none;
-            background: whitesmoke;
+            background: #6ea171;
             border: 2px solid #d3d3d3;
             padding: 2px 6px;
+            z-index: 10;
+            opacity: .8;
         }
 
         #info p {
             margin: 3px 0 4px;
+            color: whitesmoke;
         }
 
         
@@ -115,9 +118,9 @@
             width: 33%;
             background: #6ea171;
             opacity: .8;
-            border-left: 4px solid #e1d798;
+            border-left: 4px solid 'whitesmoke';
             overflow-y: scroll;
-             z-index: 10;
+            z-index: 10;
         }
         
         #side-panel p {
@@ -187,7 +190,7 @@
         <p>This map illustrates the amount of water and electricity consumed on average by month of households within certain zip codes. Electricity is measured in kilowatt-hour (kWh) and water is measured in hundreds of cubic feet (HCF). </p>
         <h2>About the data</h2>
         <p>The data comes from Los Angeles County free open data portal. It only includes residential water and power customers serviced by Los Angeles utilities.</p>
-        <p> Map Built By Ethan Gicker</p>
+        <p> <li> Built by <a target='_blank' href=https://github.com/ethangicker/ethangicker.github.io>Ethan Gicker</a></li></p>
     </div>
    
     <div id="info">
@@ -214,13 +217,17 @@
     var map = L.mapbox.map('map', 'mapbox.light', {
         center: [34.029287, -118.284053],
         zoom: 10,
-        minZoom: 8,
-        maxZoom: 12,
+        minZoom: 9,
+        maxZoom: 10,
+        dragging: false,
     });
 
     var dataLayer,
         currentAttribute = 'WaterUse',
-        currentYear = '2005';
+        currentYear = '2005',
+        PowerUse = 'PowerUse',
+        WaterUse = 'WaterUse';
+        
     
     var messaging_legend_attr = {
             'PowerUse': 'Power Use (kWh)',
@@ -483,9 +490,11 @@
             dataLayer.on('mouseover', function(e) {
                 var props = e.layer.feature.properties;
                    info.show();
-                    $('#info span').text(props.ZipCode);
-                    $(".PowerUse").text('kWh '+String(props.PowerUse));
-                    $(".WaterUse").text('HCF '+String(props.WaterUse));
+                    $('#info span').text(props.Zip_Num);
+                    $(".PowerUse").text('kWh: '+String(props.data[currentYear][PowerUse]));
+                    $(".WaterUse").text('HCF: '+String(props.data[currentYear][WaterUse]));
+                
+                console.log(props);
 
                     e.layer.setStyle({ fillOpacity: .7 });
                
